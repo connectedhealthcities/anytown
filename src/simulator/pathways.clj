@@ -1,7 +1,8 @@
 (ns simulator.pathways
   "Utilities for defining simulation pathways."
   (:use [clojure.data priority-map]
-        [clojure.algo.generic.functor :only (fmap)]))
+        [clojure.algo.generic.functor :only (fmap)]
+        [simulator.utils :only (weighted-choice)]))
 
 (defn node
   "Create a pathway node.
@@ -49,4 +50,6 @@
    A fact consists of:
    event - the event recorded as happening.
    time  - the time, relative to the patients birth, that the event took place."
-  [event time])
+  [event time]
+  {:event event
+   :time time})
