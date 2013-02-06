@@ -42,4 +42,4 @@
    of future nodes."
   [& node-times]
   {:past nil
-   :future (apply priority-map node-times)})
+   :future (apply priority-map (map #(if (fn? %) (%) %) node-times))})
