@@ -43,3 +43,10 @@
   [& node-times]
   {:past nil
    :future (apply priority-map (map #(if (fn? %) (%) %) node-times))})
+
+(defn fact
+  "A fact is an event that has happened at a given time.
+   A fact consists of:
+   event - the event recorded as happening.
+   time  - the time, relative to the patients birth, that the event took place."
+  [event time])
