@@ -29,7 +29,7 @@
             of child being chosen.
    time   - the relative (not absolute) time after the the parent node that
             this child (if chosen) will trigger."
-  [child weight time]
+  [node weight time]
   {:node node
    :weight weight
    :time time})
