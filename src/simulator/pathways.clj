@@ -34,7 +34,7 @@
    :weight weight
    :time time})
 
-(defn lifeline
+(defn create-lifeline
   "Lifeline consists of a past, events that have happened, and a future, events
    that will happen. Future events are defined as nodes. Each future node has a
    time (relative to 'now') at which it will happen. The past is a reverse
