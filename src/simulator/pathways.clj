@@ -53,3 +53,21 @@
   [event time]
   {:event event
    :time time})
+
+(defn- choose-from
+  "Selects child node(s) from an activated node."
+  [node]
+  ;; will add more complex child choices
+  (let [choice (weighted-choice :weight (:children node))]
+    (if choice {(:node choice) (:time choice)})))
+
+(defn advance-lifeline
+  "Takes the next node from the future of the life line, records it as a fact
+   in the past and inserts children from it into the future if applicable."
+  [lifeline]
+  (if (empty? (:future lifeline))
+    lifeline
+    (let [future (:future lifeline)
+          [next time] (peek future)]
+      {:past (cons (fact (:event next) time) (:past lifeline))
+       :future  (into (fmap #(- % time) (pop future)) (choose-from next))})))
