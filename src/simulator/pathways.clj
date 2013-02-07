@@ -65,9 +65,13 @@
   "Takes the next node from the future of the life line, records it as a fact
    in the past and inserts children from it into the future if applicable."
   [lifeline]
-  (if (empty? (:future lifeline))
-    lifeline
-    (let [future (:future lifeline)
-          [next time] (peek future)]
-      {:past (cons (fact (:event next) time) (:past lifeline))
-       :future  (into (fmap #(- % time) (pop future)) (choose-from next))})))
+  (if (empty? (:future lifeline)) lifeline
+      (let [future (:future lifeline)
+            [next time] (peek future)]
+        {:past (cons (fact (:event next) time) (:past lifeline))
+         :future (into (fmap #(- % time) (pop future)) (choose-from next))})))
+
+(defn run-lifeline
+  "Advances a lifeline until the future is empty."
+  [lifeline]
+  (loop [l lifeline] (if (empty? (:future l)) l (recur (advance-lifeline l)))))
