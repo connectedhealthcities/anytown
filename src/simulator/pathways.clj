@@ -24,7 +24,7 @@
   "Create a child of a pathway node.
    A child consists of:
    node   - the node that will be inserted into the future lifeline if this
-            child is chosen.
+            child is chosen OR if a sequence, a list of possibilities.
    weight - the weighting assigned to this child, used to determine probability
             of child being chosen.
    time   - the relative (not absolute) time after the the parent node that
@@ -33,6 +33,19 @@
   {:node node
    :weight weight
    :time time})
+
+(defn possibility
+  "Represents a possible choice for a node.
+   option - the node to be chosen.
+   chance - the (absolute) chance that this node is chosen i.e. more than one
+            node can be chosen given a list of possibilities."
+  [option chance]
+  {:node option
+   :chance chance})
+
+(defn- resolve-fn
+  "Evaluate if a function."
+  [f] (if (fn? f) (f) f))
 
 (defn create-lifeline
   "Lifeline consists of a past, events that have happened, and a future, events
@@ -45,7 +58,7 @@
    of future nodes."
   [& node-times]
   {:past nil
-   :future (apply priority-map (map #(if (fn? %) (%) %) node-times))})
+   :future (apply priority-map (map resolve-fn node-times))})
 
 (defn fact
   "A fact is an event that has happened at a given time.
@@ -56,12 +69,22 @@
   {:event event
    :time time})
 
+(defn- choices-from-possibilities
+  "Given a list of possibilities, choose a selection."
+  [possibilities time]
+  (apply hash-map (interleave
+                   (map :node (filter #(<= (rand) (:chance %)) possibilities))
+                   (repeat time))))
+
 (defn- choose-from
   "Selects child node(s) from an activated node."
   [node]
   ;; will add more complex child choices
   (let [choice (weighted-choice :weight (:children node))]
-    (if choice {(:node choice) (:time choice)})))
+    (cond (nil? choice) nil
+          (sequential? (:node choice)) (choices-from-possibilities
+                                (:node choice) (:time choice))
+          :else {(:node choice) (resolve-fn (:time choice))})))
 
 (defn advance-lifeline
   "Takes the next node from the future of the life line, records it as a fact
