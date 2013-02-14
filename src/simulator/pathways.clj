@@ -1,5 +1,6 @@
-(ns simulator.pathways
-  "Utilities for defining simulation pathways."
+(ns ^{:doc "Simulation pathway definitions and core functions."
+      :author "James Cunningham"}
+  simulator.pathways  
   (:use [clojure.data priority-map]
         [clojure.algo.generic.functor :only (fmap)]
         [simulator.utils :only (weighted-choice)]))

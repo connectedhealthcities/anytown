@@ -1,4 +1,6 @@
-(ns simulator.utils)
+(ns ^{:doc "Utility functions."
+      :author "James Cunningham"}
+  simulator.utils)
 
 (defn weighted-choice
   "Selects an element from choices weighted by the value extracted from
