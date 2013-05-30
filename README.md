@@ -1,13 +1,14 @@
 # simulator
 
-A Clojure library designed to ... well, that part is up to you.
+Simulates large corpuses of patient data.
 
 ## Usage
 
-FIXME
+e.g. 
+
+lein run sims/asthma.clj 100 patient-file journal-file
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013 NWeH / University of Manchester
 
-Distributed under the Eclipse Public License, the same as Clojure.
