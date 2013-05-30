@@ -2,8 +2,7 @@
       :author "James Cunningham"}
   simulator.pathways  
   (:use [clojure.data priority-map]
-        [clojure.algo.generic.functor :only (fmap)]
-        [simulator.utils :only (weighted-choice)]))
+        [simulator.utils]))
 
 (defn node
   "Create a pathway node.
@@ -37,12 +36,18 @@
 
 (defn possibility
   "Represents a possible choice for a node.
-   option - the node to be chosen.
-   chance - the (absolute) chance that this node is chosen i.e. more than one
-            node can be chosen given a list of possibilities."
+  option - the node to be chosen.
+  chance - the (absolute) chance that this node is chosen i.e. more than one
+           node can be chosen given a list of possibilities."
   [option chance]
   {:node option
    :chance chance})
+
+(defn weighted
+  "A weighted choice - currently used to provide options in a 
+  journal map (needs tidying)."
+  [choice weight]
+  {:weight weight :choice choice})
 
 (defn- resolve-fn
   "Evaluate if a function."
@@ -50,22 +55,21 @@
 
 (defn create-lifeline
   "Lifeline consists of a past, events that have happened, and a future, events
-   that will happen. Future events are defined as nodes. Each future node has a
-   time (relative to 'now') at which it will happen. The past is a reverse
-   ordered list of facts, with the time being relative to the previous fact
-   (or, for the first fact, relative to patient birth date).
-
-   This function is called with node time pairs, used to construct priority map
-   of future nodes."
+  that will happen. Future events are defined as nodes. Each future node has a
+  time (relative to 'now') at which it will happen. The past is a reverse
+  ordered list of facts, with the time being relative to the previous fact
+  (or, for the first fact, relative to patient birth date).
+  This function is called with node time pairs, used to construct priority map
+  of future nodes."
   [& node-times]
   {:past nil
    :future (apply priority-map (map resolve-fn node-times))})
 
 (defn fact
   "A fact is an event that has happened at a given time.
-   A fact consists of:
-   event - the event recorded as happening.
-   time  - a timestamp for this fact."
+  A fact consists of:
+  event - the event recorded as happening.
+  time  - a timestamp for this fact."
   [event time]
   {:event event
    :time time})
@@ -81,25 +85,30 @@
   "Selects child node(s) from an activated node."
   [node]
   ;; will add more complex child choices
-  (let [choice (weighted-choice :weight (:children node))]
+  (let [choice (weighted-choice weight (:children node))]
     (cond (nil? choice) nil
           (sequential? (:node choice)) (choices-from-possibilities
-                                (:node choice) (:time choice))
+                                        (:node choice) (:time choice))
           :else {(:node choice) (resolve-fn (:time choice))})))
 
 (defn advance-lifeline
   "Takes the next node from the future of the life line, records it as a fact
-   in the past and inserts children from it into the future if applicable."
+  in the past and inserts children from it into the future if applicable."
   [lifeline]
   (if (empty? (:future lifeline)) lifeline
-      (let [[next time] (peek (:future lifeline))
-            future (pop (:future lifeline))]
-        {:past (cons (fact (:event next) time) (:past lifeline))
-         :future (into ((:update-fn next) (if (not (nil? future))
-                                            (fmap #(- % time) future)))
-                       (choose-from next))})))
+      (do ;;(println "===" (:event (first (peek (:future lifeline)))) "\n\n\n")
+        (let [[next time] (peek (:future lifeline))
+              future (pop (:future lifeline))
+              choice (choose-from next)]
+          {:past (cons (fact (:event next) time) (:past lifeline))
+           :future (into ((:update-fn next) (fmap' #(- % time) future))
+                         choice)}))))
 
 (defn run-lifeline
-  "Advances a lifeline until the future is empty."
-  [lifeline]
-  (loop [l lifeline] (if (empty? (:future l)) l (recur (advance-lifeline l)))))
+  "Advances a lifeline until the future is empty or the (optional) 
+  stop condition is true."
+  ([lifeline] (run-lifeline lifeline (fn [_] false)))
+  ([lifeline stop?]
+     (letfn [(empty-or-stop? [ll] (or (empty? (:future ll)) (stop? ll)))]
+       (loop [l lifeline] (if (empty-or-stop? l) l
+                              (recur (advance-lifeline l)))))))
