@@ -3,7 +3,7 @@
   :url "http://nweh.org.uk/"
   :license {:name "Copyright NWEH (2013)"
             :url "http://nweh.org.uk"}
-  :dependencies [[org.clojure/clojure "1.5.0"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/data.priority-map "0.0.2"]
                  [org.clojure/algo.generic "0.1.0"]
                  [org.clojure/tools.namespace "0.2.3"]
