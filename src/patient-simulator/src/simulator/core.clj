@@ -2,6 +2,7 @@
   (:use clojure.java.io
         clojure.tools.namespace
         incanter.distributions
+        simulator.simulation
         [simulator.simulation utils standard]
         simulator.simulation.coding.read
         [simulator.pathways utils]
