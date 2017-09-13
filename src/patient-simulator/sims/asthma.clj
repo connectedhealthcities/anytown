@@ -100,8 +100,7 @@
              asthma-diagnosis-node    #(years-normal 15 12)
              death                    #(years-normal 80 10))
 
-(patient-fn #(assoc (random-patient [1965 20] ethnicity-all ["gp"])
-               :sex :male))
+(patient-fn #(random-patient [1965 20] ethnicity-all ["gp"]))
 
 (journal-formatter default-journal-formatter)
 
