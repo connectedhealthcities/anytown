@@ -2,6 +2,7 @@
       :author "Lucy Bridges"}
   simulator.simulations.normal
   (:use simulator.simulation
+        [simulator.utils :only (rand-range)]
         [simulator.simulation utils standard]
         simulator.simulation.coding.read
         simulator.pathways

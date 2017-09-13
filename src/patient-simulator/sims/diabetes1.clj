@@ -2,6 +2,7 @@
       :author "Lucy Bridges and James Cunningham"}
   simulator.simulations.diabetes1
   (:use simulator.simulation
+        [simulator.utils :only (rand-range)]
         [simulator.simulation utils standard]
         simulator.simulation.coding.read
         simulator.pathways

@@ -7,7 +7,7 @@
                  [org.clojure/data.priority-map "0.0.7"]
                  [org.clojure/algo.generic "0.1.2"]
                  [org.clojure/tools.namespace "0.2.11"]
-                 [incanter "1.4.0"]]
+                 [net.mikera/core.matrix "0.61.0"]]
   :jvm-opts ["-Djava.awt.headless=true"]
   :aot [simulator.core]
   :main simulator.core)

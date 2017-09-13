@@ -1,12 +1,12 @@
 (ns simulator.core
   (:use clojure.java.io
         clojure.tools.namespace
-        incanter.distributions
         simulator.simulation
         [simulator.simulation utils standard]
         simulator.simulation.coding.read
         [simulator.pathways utils]
-        simulator.time)  
+        simulator.time
+        clojure.core.matrix.random)  
   (:gen-class))
 
 (defn- construct-sim-ns [sim-file]

@@ -2,8 +2,7 @@
       :author "James Cunningham"}
   simulator.simulation.utils
   (:use simulator.pathways
-        simulator.pathways.utils
-        incanter.distributions))
+        simulator.pathways.utils))
 
 (def birth (make-simple-node :born))
 
@@ -59,10 +58,4 @@
 
 ;; stats utils (need to organise properly)
 
-(defn bd [n p] (draw (binomial-distribution n p)))
-
-(defn nd [m sd] (draw (normal-distribution m sd)))
-
-(defn rand-range
-  "Returns a random real value in the range [x y)."
-  [x y] (+ x (rand (- y x))))
+;;(defn nd [m sd] (draw (normal-distribution m sd)))

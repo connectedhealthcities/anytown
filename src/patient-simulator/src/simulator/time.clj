@@ -2,7 +2,7 @@
            and times."
       :author "James Cunningham"}
   simulator.time
-  (:use [incanter.distributions :only (normal-distribution uniform-distribution draw)])
+  (:use [simulator.utils :only (rand-normal)])
   (import [java.util Date Calendar]
           [java.text SimpleDateFormat]))
 
@@ -96,7 +96,7 @@
   value of between from and to years drawn from a normal distribution
   with given mean and sd number of years."
   [mean sd]
-  (long (draw (normal-distribution (years-to-ms mean) (years-to-ms sd)))))
+  (long (rand-normal (years-to-ms mean) (years-to-ms sd))))
 
 (defn years
   "Gives a random number of milliseconds representing an absolute
@@ -111,7 +111,7 @@
   value of between from and to years drawn from a normal distribution
   with given mean and sd number of years."
   [mean sd]
-  (long (draw (normal-distribution (years-to-ms mean) (years-to-ms sd)))))
+  (long (rand-normal (years-to-ms mean) (years-to-ms sd))))
 
 
 ;;; --- random date functions ---
@@ -128,5 +128,4 @@
 (defn random-date-normal
   [mean-year sd]
   (new Date
-       (long (draw (normal-distribution (year-in-ms mean-year)
-                                        (years-to-ms sd))))))
+       (long (rand-normal (year-in-ms mean-year) (years-to-ms sd)))))

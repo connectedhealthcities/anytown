@@ -1,8 +1,7 @@
 (ns ^{:doc "Tools for running a standard simulation."
       :author "James Cunningham"}
   simulator.simulation.standard
-  (:use [simulator simulation time]
-        incanter.distributions)
+  (:use [simulator simulation time utils])
   (:import [java.util Date Calendar]
            java.text.SimpleDateFormat))
 
@@ -38,13 +37,13 @@
   [patient]
   (let [dob (:dob patient)
         start-age (max (years-to-ms 8)
-                       (long (draw (normal-distribution
-                                    (years-to-ms 18)
-                                    (years-to-ms 4)))))
+                       (long (rand-normal
+                                 (years-to-ms 18)
+                                 (years-to-ms 4))))
         start-date (add-time-to-date dob start-age)
-        stop-age (long (draw (normal-distribution
-                              (years-to-ms 40)
-                              (years-to-ms 10))))
+        stop-age (long (rand-normal
+                           (years-to-ms 40)
+                           (years-to-ms 10)))
         stop-date (add-time-to-date dob stop-age)
         started (if (> 0.1 (rand)) start-age)
         quit (if (and start-age (> 0.5 (rand))) stop-age)]

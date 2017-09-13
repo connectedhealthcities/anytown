@@ -1,7 +1,8 @@
 (ns ^{:doc "Read code definitions."
       :author "James Cunningham and Lucy Bridges"}
   simulator.simulation.coding.read
-  (:use simulator.simulation.utils))
+  (:use [simulator.utils :only (rand-range rand-normal rand-binomial)]
+        simulator.simulation.utils))
 
 ;; ethnicities
 
@@ -57,9 +58,9 @@
 
 (def general-admin
   (concat
-    (measurement-entry pulse-rate #(nd 70 50/120) "bpm")
+    (measurement-entry pulse-rate #(rand-normal 70 50/120) "bpm")
     (entry had-a-chat)
-    (measurement-entry alcohol-screening #(nd 3 1/12) "/12")
+    (measurement-entry alcohol-screening #(rand-normal 3 1/12) "/12")
     (entry new-patient-screening)
     (entry smoking-cessation-advice)
     (entry seen-by-gp)))
@@ -103,11 +104,11 @@
 (def general-measurements
   (concat
     (measurement-entry bmi
-            #(nd 24 18/40) "kg/m^2")
+            #(rand-normal 24 18/40) "kg/m^2")
     (measurement-entry weight
-            #(nd 90 40/150) "kg")
+            #(rand-normal 90 40/150) "kg")
     (measurement-entry height
-            #(nd 185 120/250) "cm") 
+            #(rand-normal 185 120/250) "cm") 
     (measurement-entry systolic-bp
             #(rand-range 80 130) "mmHg") 
     (measurement-entry diastolic-bp
@@ -116,15 +117,15 @@
 
 (def new-patient-details
   (concat
-    (measurement-entry alcohol-screening #(nd 2 1/12) "/12")
+    (measurement-entry alcohol-screening #(rand-normal 2 1/12) "/12")
     (entry new-patient-screening)
     (entry smoking-cessation-advice)
     (measurement-entry bmi
-            #(nd 24 18/40) "kg/m^2")
+            #(rand-normal 24 18/40) "kg/m^2")
     (measurement-entry weight
-            #(nd 90 40/150) "kg")
+            #(rand-normal 90 40/150) "kg")
     (measurement-entry height
-            #(nd 185 120/250) "cm") 
+            #(rand-normal 185 120/250) "cm") 
     (measurement-entry systolic-bp
             #(rand-range 80 130) "mmHg") 
     (measurement-entry diastolic-bp
@@ -167,9 +168,9 @@
 
 (def general-blood-tests
   (concat
-    (measurement-entry serum-ldl-cholesterol #(bd 9.00 28/90) "mmol/L")
-    (measurement-entry serum-hdl-cholesterol #(bd 2.5 14/25) "mmol/L")
-    (measurement-entry serum-cholesterol-and-level #(bd 6.00 5/6) "mmol/L")
+    (measurement-entry serum-ldl-cholesterol #(rand-binomial 9.00 28/90) "mmol/L")
+    (measurement-entry serum-hdl-cholesterol #(rand-binomial 2.5 14/25) "mmol/L")
+    (measurement-entry serum-cholesterol-and-level #(rand-binomial 6.00 5/6) "mmol/L")
     (measurement-entry creatinine-serum #(rand-range 0.1 16) "umol/L")
     (measurement-entry potassium-serum #(rand-range 0.1 12) "mmol/L")
     (measurement-entry sodium-serum #(rand-range 0.2 200) "mmol/L")
